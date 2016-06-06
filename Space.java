@@ -30,6 +30,7 @@ public class Space extends Canvas implements MouseListener, Runnable
 	// uncomment once you are ready for this part
 	private boolean gravtoggle = true;
 	private boolean temptoggle = false;
+	private boolean stillball = false;
 	
 	 private double gravity = .1;
 	 private double resistance = .9;
@@ -50,7 +51,7 @@ public class Space extends Canvas implements MouseListener, Runnable
 		//instantiate other stuff
 		addMouseListener(this);
 		ball = new ArrayList<Ball>();
-		ball.add(new Ball(100,100,size,0,Math.random()*7));
+		//ball.add(new Ball(100,100,size,0,Math.random()*7));
 		
 		new Thread(this).start();
 
@@ -85,8 +86,14 @@ public class Space extends Canvas implements MouseListener, Runnable
 		graphToBack.setColor(Color.PINK);
 		graphToBack.drawString("Speed", 5, 150 );
 		graphToBack.drawRect(60,140,20,20);
+		
 		graphToBack.setColor(Color.BLUE);
-		graphToBack.drawString("Balls ", 25, 50 );
+		graphToBack.drawString("Motion ", 5, 230 );
+		graphToBack.drawRect(60,220,20,20);
+		
+		graphToBack.setColor(Color.WHITE);
+		graphToBack.drawString("Freeze ", 5, 310 );
+		graphToBack.drawRect(60,300,20,20);
 		
 		if(time<1000)
 		time++;
@@ -200,11 +207,26 @@ public class Space extends Canvas implements MouseListener, Runnable
 			}else{
 				temptoggle = true;
 			}
+		}else if(e.getX()<80 && e.getX()>60 && e.getY()<240 && e.getY()>220){
+			//System.out.println("test");
+			if(stillball==true){
+				stillball = false;
+			}else{
+				stillball = true;
+			}
+		}else if(e.getX()<80 && e.getX()>60 && e.getY()<320 && e.getY()>300){
+			//System.out.println("test");
+			for(int i = 0 ; i<ball.size();i++){
+				ball.get(i).setHSpeed(0);
+				ball.get(i).setSpeed(0);
+			}
 		}else{
+			if(stillball==false)
 			ball.add(new Ball(e.getX(),e.getY(),size,(int)(Math.random()*7*
 					Math.pow(-1, (int)(Math.random()*10)))
 							,(int)(Math.random()*7*Math.pow(-1, (int)(Math.random()*10)))));
-			
+			else
+				ball.add(new Ball(e.getX(),e.getY(),size,0));
 		}
 		
 		
